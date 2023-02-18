@@ -9,16 +9,20 @@ public class WolfChaseState : StateMachineBehaviour
     NavMeshAgent agent;
     float distance;
     Rabbit rabbit;
+    
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         agent = animator.GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rabbit = player.GetComponent<Rabbit>();
+        agent.speed = 10f;
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        
+        
 
         if (rabbit.isAlive == true)
         {

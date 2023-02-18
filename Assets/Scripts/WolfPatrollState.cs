@@ -16,13 +16,14 @@ public class WolfPatrollState : StateMachineBehaviour
     float distance;
     Transform player;
     Rabbit rabbit;
-
+ 
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         agent = animator.GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rabbit = player.GetComponent<Rabbit>();
+        agent.speed = 5f;
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

@@ -9,6 +9,7 @@ public class WolfAttackState : StateMachineBehaviour
     Animator RabbitAnimator;
     Rabbit rabbit;
     NavMeshAgent agent;
+    
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -16,7 +17,6 @@ public class WolfAttackState : StateMachineBehaviour
         RabbitAnimator = player.GetComponent<Animator>();
         rabbit = player.GetComponent<Rabbit>();
         agent = player.GetComponent<NavMeshAgent>();
-        RabbitAnimator.SetBool("isIdle",true);
         RabbitAnimator.SetBool("isPatroll", false);
     }
 
@@ -27,10 +27,8 @@ public class WolfAttackState : StateMachineBehaviour
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        RabbitAnimator.SetBool("isDead",true);
-        RabbitAnimator.SetBool("isPatroll",false);
-        RabbitAnimator.SetBool("isIdle",false);
-        rabbit.isAlive = false;
+        
+        
     }
 
     override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
