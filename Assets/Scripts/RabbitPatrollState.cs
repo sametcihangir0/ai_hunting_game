@@ -6,38 +6,26 @@ using UnityEngine.AI;
 
 public class RabbitPatrollState : StateMachineBehaviour
 {
-    float timer;
+   
     NavMeshAgent agent;
     RaycastHit hit;
     public Vector3 RabbitTargetPoint;
     bool isHit;
+    Vector3 origin;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        timer = 0;
-        agent = animator.GetComponent<NavMeshAgent>();
-        
        
+        agent = animator.GetComponent<NavMeshAgent>();
+        agent.isStopped= false;
     }
 
     
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        
-        
-        timer += Time.deltaTime;
-        if (timer > 10)
-        {
-            animator.SetBool("isPatroll",false);
-        }
-
-        Vector3 origin;
-        //tavþanýn konumuna ekstra pozisyon
 
         agent.SetDestination(RabbitTargetPoint);
 
-
-        //out hit ile yukarýdaki raycaste baðlamýþ olduk .
 
         if (isHit == false)
         {
@@ -45,7 +33,7 @@ public class RabbitPatrollState : StateMachineBehaviour
 
             if (Physics.Raycast(origin, Vector3.down, out hit, 6, LayerMask.GetMask("Ground")))
             {
-                RabbitTargetPoint = hit.point;     //ýþýnýn dokunduðu noktayý bu deðiþkene atamýþ olduk 
+                RabbitTargetPoint = hit.point;     
                 isHit = true;
             }
         }
@@ -59,10 +47,6 @@ public class RabbitPatrollState : StateMachineBehaviour
             }
             
         }
-        
-        
-        
-
     }
 
     

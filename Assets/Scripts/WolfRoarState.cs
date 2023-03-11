@@ -7,6 +7,7 @@ using UnityEngine.AI;
 public class WolfRoarState : StateMachineBehaviour
 {
     NavMeshAgent agent;
+    
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {

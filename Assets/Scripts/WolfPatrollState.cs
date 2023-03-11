@@ -16,6 +16,13 @@ public class WolfPatrollState : StateMachineBehaviour
     float distance;
     Transform player;
     Rabbit rabbit;
+    bool isRotate;
+    bool oneTimeSetRotate;
+    bool isRoarTrigger;
+    Quaternion target;
+    float distance2;
+    Guardian guardian;
+    
  
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -24,6 +31,8 @@ public class WolfPatrollState : StateMachineBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rabbit = player.GetComponent<Rabbit>();
         agent.speed = 5f;
+        guardian= player.GetComponent<Guardian>();
+
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -58,19 +67,49 @@ public class WolfPatrollState : StateMachineBehaviour
         if (rabbit.isAlive == true)
         {
             distance = Vector3.Distance(agent.transform.position, player.transform.position);
-            if (distance < 10f)
+            if (distance < 15f)
             {
-                animator.SetBool("isChase", true);
-                animator.SetBool("isPatroll", false);
+                isRoarTrigger = true;
+
+            }
+            if (isRoarTrigger == true)
+            {
+                if (!oneTimeSetRotate)
+                {
+                    agent.isStopped= true;
+                    target = Quaternion.LookRotation((player.position - agent.transform.position) , Vector3.up); //bakýþ yeri
+                    target = Quaternion.Euler(0,target.eulerAngles.y,0); //
+
+                    isRotate = true;
+                    oneTimeSetRotate= true;
+                }
+
+                if (isRotate)
+                {
+                    agent.transform.rotation = Quaternion.RotateTowards(agent.transform.rotation, target, 125 * Time.deltaTime);
+                }
+
+                if (CheckRotation() && isRotate)
+                {
+                    animator.SetBool("isChase", true);
+                    animator.SetBool("isPatroll", false);
+                    isRoarTrigger = false;   //Attack daha sonra bir defa daha çalýþacaðý için buralarý da false oldu
+                    isRotate = false; //Attack daha sonra bir defa daha çalýþacaðý için buralarý da false oldu
+                    oneTimeSetRotate = false; //Attack daha sonra bir defa daha çalýþacaðý için buralarý da false oldu
+                }
 
             }
         }
-        
-        
-        
 
-
+       
+   
     }
+
+    public bool CheckRotation()
+    {
+        return Mathf.Approximately(Mathf.Abs(Quaternion.Dot(agent.transform.rotation, target)), 1f); //2 rotasyonun eþit olup olmadýðýný sorguluyor 
+    }
+
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,7 +10,15 @@ public class WolfChaseState : StateMachineBehaviour
     NavMeshAgent agent;
     float distance;
     Rabbit rabbit;
+    bool isRotate;
+    bool oneTimeSetRotate;
+    bool isAttackTrigger;
+    Quaternion target;
+    Vector3 rabbitRotatePosition;
+    Vector3 target2;
+    Wolf wolf;
     
+
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -17,12 +26,13 @@ public class WolfChaseState : StateMachineBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rabbit = player.GetComponent<Rabbit>();
         agent.speed = 10f;
+        agent.isStopped= false;
+        wolf = animator.GetComponent<Wolf>();
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        
-        
+
 
         if (rabbit.isAlive == true)
         {
@@ -38,25 +48,23 @@ public class WolfChaseState : StateMachineBehaviour
                 agent.SetDestination(player.transform.position);
             }
 
-            if (agent.remainingDistance <= agent.stoppingDistance)
+            if (agent.remainingDistance <= agent.stoppingDistance && wolf.first == false)
             {
                 animator.SetBool("isAttack", true);
                 animator.SetBool("isChase", false);
-                animator.SetBool("isPatroll", false);
-
+                wolf.first = true;
             }
+      
         }
         else
         {
             animator.SetBool("isAttack", false);
             animator.SetBool("isChase", false);
-            animator.SetBool("isPatroll", true);
 
         }
-
-
-
     }
+
+    
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
